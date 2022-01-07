@@ -95,41 +95,72 @@ document.querySelector(`.nav__links`).addEventListener(`click`, function (eve) {
 });
 
 ////////////////////////////////////////////////////////////
+// Tabbed Component
 
-// DOM Traversing
+const tabs = document.querySelectorAll(`.operations__tab`);
+const tabsContainer = document.querySelector(`.operations__tab-container`);
+const tabsContent = document.querySelectorAll(`.operations__content`);
 
-const h1 = document.querySelector(`h1`);
+// // bad practice because it makes however many copies
+// tabs.forEach(tab =>
+//   tab.addEventListener(`click`, () => console.log(`tab soda`))
+// );
 
-// going downwards, chilcdren
+tabsContainer.addEventListener(`click`, function (eve) {
+  // matching strategy
+  const clickedButton = eve.target.closest(`.operations__tab`);
 
-console.log(h1.querySelectorAll(`.highlight`));
-console.log(h1.childNodes);
-// child elements
-console.log(h1.children);
-h1.firstElementChild.style.color = `green`;
-h1.lastElementChild.style.color = `yellow`;
+  // guard clause
+  if (!clickedButton) return;
 
-// going upwards, parents
-console.log(h1.parentNode);
-console.log(h1.parentElement);
+  tabs.forEach(tab => tab.classList.remove(`operations__tab--active`));
+  tabsContent.forEach(tab =>
+    tab.classList.remove(`operations__content--active`)
+  );
 
-h1.closest(`.header`).style.background = `var(--gradient-primary)`;
-h1.closest(`h1`).style.background = `var(--gradient-primary)`;
-
-// going sideways, siblings
-
-console.log(h1.previousElementSibling);
-console.log(h1.nextElementSibling);
-
-console.log(h1.previousSibling);
-console.log(h1.nextSibling);
-
-// finding all siblings by getting children of parents
-
-console.log(h1.parentElement.children);
-[...h1.parentElement.children].forEach(function (ele) {
-  if (ele !== h1) ele.style.transform = `scale(0.75)`;
+  clickedButton.classList.add(`operations__tab--active`);
+  // active tab
+  document
+    .querySelector(`.operations__content--${clickedButton.dataset.tab}`)
+    .classList.add(`operations__content--active`);
 });
+
+////////////////////////////////////////////////////////////
+
+// // DOM Traversing
+
+// const h1 = document.querySelector(`h1`);
+
+// // going downwards, chilcdren
+
+// console.log(h1.querySelectorAll(`.highlight`));
+// console.log(h1.childNodes);
+// // child elements
+// console.log(h1.children);
+// h1.firstElementChild.style.color = `green`;
+// h1.lastElementChild.style.color = `yellow`;
+
+// // going upwards, parents
+// console.log(h1.parentNode);
+// console.log(h1.parentElement);
+
+// h1.closest(`.header`).style.background = `var(--gradient-primary)`;
+// h1.closest(`h1`).style.background = `var(--gradient-primary)`;
+
+// // going sideways, siblings
+
+// console.log(h1.previousElementSibling);
+// console.log(h1.nextElementSibling);
+
+// console.log(h1.previousSibling);
+// console.log(h1.nextSibling);
+
+// // finding all siblings by getting children of parents
+
+// console.log(h1.parentElement.children);
+// [...h1.parentElement.children].forEach(function (ele) {
+//   if (ele !== h1) ele.style.transform = `scale(0.75)`;
+// });
 
 ////////////////////////////////////////////////////////////
 // console.log(document.documentElement);
