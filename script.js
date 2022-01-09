@@ -7,6 +7,9 @@ const modal = document.querySelector('.modal');
 const overlay = document.querySelector('.overlay');
 const btnCloseModal = document.querySelector('.btn--close-modal');
 const btnsOpenModal = document.querySelectorAll('.btn--show-modal');
+const btnScrollTo = document.querySelector(`.btn--scroll-to`);
+const section1 = document.querySelector(`#section--1`);
+const nav = document.querySelector(`.nav`);
 
 const openModal = function (e) {
   e.preventDefault();
@@ -33,9 +36,6 @@ document.addEventListener('keydown', function (e) {
     closeModal();
   }
 });
-
-const btnScrollTo = document.querySelector(`.btn--scroll-to`);
-const section1 = document.querySelector(`#section--1`);
 
 btnScrollTo.addEventListener(`click`, function (e) {
   const s1coords = section1.getBoundingClientRect();
@@ -126,7 +126,75 @@ tabsContainer.addEventListener(`click`, function (eve) {
 });
 
 ////////////////////////////////////////////////////////////
+// Passing Arguments Into Event Handlers
 
+const hoverOp = function (eve) {
+  // console.log(this, eve.currentTarget);
+  if (eve.target.classList.contains(`nav__link`)) {
+    const hovered = eve.target;
+    const nonHovered = hovered.closest(`.nav`).querySelectorAll(`.nav__link`);
+    const logo = hovered.closest(`.nav`).querySelector(`img`);
+
+    nonHovered.forEach(ele => {
+      if (ele !== hovered) ele.style.opacity = this;
+    });
+    logo.style.opacity = this;
+  }
+};
+
+// add event listener expects a function to be passed in for second value
+// bind method
+// passing argument into handler
+nav.addEventListener(`mouseover`, hoverOp.bind(0.5));
+
+nav.addEventListener(`mouseout`, hoverOp.bind(1));
+
+////////////////////////////////////////////////////////////
+// // Scroll Event Sticky Navigation
+// const initialPos = section1.getBoundingClientRect();
+// console.log(initialPos);
+
+// window.addEventListener(`scroll`, function (eve) {
+//   // console.log(window.scrollY);
+//   if (window.scrollY > initialPos.top) nav.classList.add(`sticky`);
+//   else nav.classList.remove(`sticky`);
+// });
+
+// Intersection Observer API Sticky Navigation
+
+// const obsFoo = function (entries, observer) {
+//   entries.forEach(entry => console.log(entry));
+// };
+
+// const obsOpt = {
+//   // observe entire viewpoint
+//   root: null,
+//   // percentage of intersection at which callback will be called
+//   threshold: [0, 0.2],
+// };
+
+// const observer = new IntersectionObserver(obsFoo, obsOpt);
+// observer.observe(section1);
+
+const header = document.querySelector(`.header`);
+const navHeight = nav.getBoundingClientRect().height;
+
+const stickyNav = function (entries) {
+  const [entry] = entries;
+  console.log(entry);
+  if (!entry.isIntersecting) nav.classList.add(`sticky`);
+  else nav.classList.remove(`sticky`);
+};
+
+const headerObserver = new IntersectionObserver(stickyNav, {
+  root: null,
+  threshold: 0,
+  // height of the nav bar
+  rootMargin: `-${navHeight}px`,
+});
+headerObserver.observe(header);
+
+////////////////////////////////////////////////////////////
 // // DOM Traversing
 
 // const h1 = document.querySelector(`h1`);
