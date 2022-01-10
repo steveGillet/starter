@@ -199,8 +199,8 @@ headerObserver.observe(header);
 const allSections = document.querySelectorAll(`.section`);
 
 const sectionAppear = function (entries, observer) {
-  const [entry, entry2] = entries;
-  console.log(entry);
+  const [entry] = entries;
+  // console.log(entry);
   if (!entry.isIntersecting) return;
   entry.target.classList.remove(`section--hidden`);
   observer.unobserve(entry.target);
@@ -208,13 +208,40 @@ const sectionAppear = function (entries, observer) {
 
 const sectionObserver = new IntersectionObserver(sectionAppear, {
   root: null,
-  threshold: [0.2, 0.2],
+  threshold: [0.2, 0.3],
 });
 
 allSections.forEach(function (section) {
   sectionObserver.observe(section);
   section.classList.add(`section--hidden`);
 });
+
+////////////////////////////////////////////////////////////
+// Lazy Loading Images
+const imgTargets = document.querySelectorAll(`img[data-src]`);
+// console.log(imgTargets);
+
+const loadImg = function (entries, observer) {
+  const [entry] = entries;
+  // console.log(entry);
+
+  if (!entry.isIntersecting) return;
+  // replace src with data-src
+  entry.target.src = entry.target.dataset.src;
+  // if you remove the lazy-img before the img loads then you have a noticeable img load with slower connections
+  // entry.target.classList.remove(`lazy-img`);
+  entry.target.addEventListener(`load`, function () {
+    entry.target.classList.remove(`lazy-img`);
+  });
+  observer.unobserve(entry.target);
+};
+const imgObserver = new IntersectionObserver(loadImg, {
+  root: null,
+  threshold: 0,
+  // add a rootMargin so the images load before you get to them
+  rootMargin: `150px`,
+});
+imgTargets.forEach(img => imgObserver.observe(img));
 
 ////////////////////////////////////////////////////////////
 // // DOM Traversing
