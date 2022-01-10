@@ -244,6 +244,37 @@ const imgObserver = new IntersectionObserver(loadImg, {
 imgTargets.forEach(img => imgObserver.observe(img));
 
 ////////////////////////////////////////////////////////////
+// Slider Component
+
+const slides = document.querySelectorAll(`.slide`);
+const btnLeft = document.querySelector(`.slider__btn--left`);
+const btnRight = document.querySelector(`.slider__btn--right`);
+const slider = document.querySelector(`.slider`);
+
+let currentSlide = 0;
+
+slider.style.transform = `scale(0.25)`;
+slider.style.overflow = `visible`;
+slides.forEach(
+  (slide, index) => (slide.style.transform = `translateX(${index * 100}%)`)
+);
+
+btnRight.addEventListener(`click`, function () {
+  currentSlide++;
+  slides.forEach(
+    (slide, index) =>
+      (slide.style.transform = `translateX(${(index - currentSlide) * 100}%)`)
+  );
+});
+btnRight.addEventListener(`click`, function () {
+  currentSlide++;
+  slides.forEach(
+    (slide, index) =>
+      (slide.style.transform = `translateX(${(index - currentSlide) * 100}%)`)
+  );
+});
+
+////////////////////////////////////////////////////////////
 // // DOM Traversing
 
 // const h1 = document.querySelector(`h1`);
