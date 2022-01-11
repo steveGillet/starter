@@ -253,25 +253,28 @@ const slider = document.querySelector(`.slider`);
 
 let currentSlide = 0;
 
-slider.style.transform = `scale(0.25)`;
-slider.style.overflow = `visible`;
-slides.forEach(
-  (slide, index) => (slide.style.transform = `translateX(${index * 100}%)`)
-);
+// slider.style.transform = `scale(0.25)`;
+// slider.style.overflow = `visible`;
+
+const changeSlide = function (currentSlide) {
+  slides.forEach(
+    (slide, index) =>
+      (slide.style.transform = `translateX(${(index - currentSlide) * 100}%)`)
+  );
+};
+
+// displays the slides in their original set up.
+changeSlide(currentSlide);
 
 btnRight.addEventListener(`click`, function () {
   currentSlide++;
-  slides.forEach(
-    (slide, index) =>
-      (slide.style.transform = `translateX(${(index - currentSlide) * 100}%)`)
-  );
+  if (currentSlide === slides.length) currentSlide = 0;
+  changeSlide(currentSlide);
 });
-btnRight.addEventListener(`click`, function () {
-  currentSlide++;
-  slides.forEach(
-    (slide, index) =>
-      (slide.style.transform = `translateX(${(index - currentSlide) * 100}%)`)
-  );
+btnLeft.addEventListener(`click`, function () {
+  currentSlide--;
+  if (currentSlide === -1) currentSlide = slides.length - 1;
+  changeSlide(currentSlide);
 });
 
 ////////////////////////////////////////////////////////////
